@@ -1,5 +1,6 @@
 <?php
 
+use App\Service\DaDataService;
 use DI\ContainerBuilder;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
@@ -26,20 +27,18 @@ $dbParams = [
     'host'   => $_ENV['DATABASE_HOST'],
     'port'   => $_ENV['DATABASE_PORT'],
 ];
-
 $config = ORMSetup::createAttributeMetadataConfiguration($paths, $isDevMode);
 $connection = DriverManager::getConnection($dbParams, $config);
 $entityManager = new EntityManager($connection, $config);
 
 $containerBuilder = new ContainerBuilder();
-
 $containerBuilder->addDefinitions([
     'App\\Controller\\' => autowire(),
     'App\\Service\\' => autowire(),
     'Doctrine\\ORM\\EntityManager' => $entityManager,
 ]);
-
 $container = $containerBuilder->build();
+$container->set(DaDataService::class, fn() => new DaDataService($_ENV['DADATA_API_KEY']));
 
 $routes = require __DIR__ . '/config/routes.php';
 $dispatcher = simpleDispatcher($routes);
