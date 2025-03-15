@@ -4,9 +4,8 @@ use App\Controller\ProductController;
 use FastRoute\RouteCollector;
 
 return function (RouteCollector $r) {
-    $r->addRoute('POST', '/products', [ProductController::class, 'get']);
-    $r->addRoute('GET', '/product/{id:\d+}', [ProductController::class, 'getUser']);
-    $r->addRoute('POST', '/product', [ProductController::class, 'create']);
-    $r->addRoute('PUT', '/product/{id:\d+}', [ProductController::class, 'update']);
+    $r->addRoute('POST', '/products', [ProductController::class, 'getByFilter']);
+    $r->addRoute('GET', '/product/{id:\d+}', [ProductController::class, 'get']);
+    $r->addRoute(['POST', 'PUT'], '/product', [ProductController::class, 'save']);
     $r->addRoute('DELETE', '/product/{id:\d+}', [ProductController::class, 'delete']);
 };

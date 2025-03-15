@@ -12,6 +12,8 @@ class ProductDto implements DtoInterface
 
     public ?string $ean13 = null;
 
+    public ?string $description = null;
+
     /**
      * @var CategoryDto[]|null
      */
