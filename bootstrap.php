@@ -10,6 +10,7 @@ use function DI\autowire;
 
 
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/config/exceptionHandler.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();

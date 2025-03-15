@@ -22,7 +22,11 @@ switch ($routeInfo[0]) {
         [$controllerClass, $method] = $routeInfo[1];
         $varsUrl = $routeInfo[2];
 
+        $json = file_get_contents("php://input");
+        $postData = json_decode($json, true);
+
         $controller = $container->get($controllerClass);
-        $controller->$method($_REQUEST, $varsUrl);
+        $response = $controller->$method($postData, $varsUrl);
+        echo json_encode($response);
         break;
 }

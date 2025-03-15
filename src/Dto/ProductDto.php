@@ -2,9 +2,7 @@
 
 namespace App\Dto;
 
-use JsonSerializable;
-
-class ProductDto
+class ProductDto implements DtoInterface
 {
     public ?int $id = null;
 
@@ -14,6 +12,8 @@ class ProductDto
 
     public ?string $ean13 = null;
 
-    public ?int $categoryId = null;
-
+    /**
+     * @var CategoryDto[]|null
+     */
+    public ?array $categories = null;
 }
