@@ -6,10 +6,19 @@ use App\Dto\ProductDto;
 use App\Entity\CategoryEntity;
 use App\Entity\ProductEntity;
 use App\Exception\Notice;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
 
 class ProductService extends BasicService
 {
+    public function __construct(
+        protected EntityManager $entityManager,
+        private readonly DaDataService   $daDataService,
+    )
+    {
+        parent::__construct($this->entityManager);
+    }
+
     public function getByFilter(ProductDto $dto): array
     {
         return $this->entityManager->getRepository(ProductEntity::class)->getByDto($dto);
@@ -18,7 +27,7 @@ class ProductService extends BasicService
     public function get(int $id): ProductEntity
     {
         return $this->entityManager->find(ProductEntity::class, $id)
-            ?? throw new Notice('Товар не найден!');
+            ?? throw new Notice('Товар не найден!', 404);
     }
 
     public function delete(int $id): void
@@ -40,6 +49,10 @@ class ProductService extends BasicService
     public function save(ProductDto $dto): void
     {
         try {
+            if (!$this->daDataService->isValidInn($dto->inn)) {
+                throw new Notice('Не корректный ИНН!');
+            }
+
             $product = $dto->id === null ? new ProductEntity() : $this->entityManager->find(ProductEntity::class, $dto->id);
             $product
                 ->setName($dto->name)
@@ -50,7 +63,7 @@ class ProductService extends BasicService
             $product->getCategories()->clear();
             foreach ($dto->categories as $categoryDto) {
                 $category = $this->entityManager->find(CategoryEntity::class, $categoryDto->id)
-                    ?? throw new Notice('Категория не найдена!');
+                    ?? throw new Notice('Категория не найдена!', 404);
                 $product->addCategory($category);
             }
 

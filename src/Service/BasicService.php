@@ -9,7 +9,7 @@ use Doctrine\ORM\EntityManager;
 class BasicService
 {
     public function __construct(
-        protected readonly EntityManager $entityManager,
+        protected EntityManager $entityManager,
     )
     {
     }
