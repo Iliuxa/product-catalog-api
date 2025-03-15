@@ -1,5 +1,6 @@
 <?php
 
+use App\Command\FixtureLoadCommand;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\PhpFile;
 use Doctrine\Migrations\DependencyFactory;
@@ -17,6 +18,7 @@ $config = new PhpFile('migrations.php');
 $dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
 
 $commands = [
+    new FixtureLoadCommand($dependencyFactory),
     new DiffCommand($dependencyFactory),
     new ExecuteCommand($dependencyFactory),
     new MigrateCommand($dependencyFactory),

@@ -3,9 +3,12 @@
 namespace App\Controller;
 
 
+use App\Dto\CategoryDto;
+use App\Dto\ProductDto;
+use App\Exception\ApiException;
 use App\Service\ProductService;
 
-class ProductController
+class ProductController extends BasicController
 {
     public function __construct(
         private readonly ProductService $service
@@ -13,9 +16,14 @@ class ProductController
     {
     }
 
-    public function get(array $request)
+    /**
+     * @param array $postData
+     * @return ProductDto[]
+     * @throws ApiException
+     */
+    public function get(array $postData): array
     {
-
-        echo json_encode(["message" => "Добро пожаловать в API"]);
+        $dto = $this->arrayToDto($postData, ProductDto::class, ['categories' => CategoryDto::class]);
+        return $this->service->toItemDto($this->service->get($dto));
     }
 }

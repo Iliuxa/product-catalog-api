@@ -2,6 +2,9 @@
 
 namespace App\Entity;
 
+use App\Attribute\DtoObject;
+use App\Dto\ProductDto;
+use App\repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -16,11 +19,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\UniqueConstraint;
 
-#[Entity]
+#[DtoObject(ProductDto::class)]
+#[Entity(repositoryClass: ProductRepository::class)]
 #[Table(name: "PRODUCT", uniqueConstraints: [
     new UniqueConstraint(name: "unique_product", columns: ["inn", "ean13"])
 ])]
-class ProductEntity
+class ProductEntity extends AbstractEntity
 {
     #[Id]
     #[GeneratedValue]
