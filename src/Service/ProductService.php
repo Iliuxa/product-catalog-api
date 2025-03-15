@@ -8,15 +8,17 @@ use App\Entity\ProductEntity;
 use App\Exception\Notice;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Exception\ORMException;
+use Monolog\Logger;
 
 class ProductService extends BasicService
 {
     public function __construct(
-        protected EntityManager $entityManager,
-        private readonly DaDataService   $daDataService,
+        protected EntityManager        $entityManager,
+        protected Logger               $logger,
+        private readonly DaDataService $daDataService,
     )
     {
-        parent::__construct($this->entityManager);
+        parent::__construct($this->entityManager, $this->logger);
     }
 
     public function getByFilter(ProductDto $dto): array
@@ -37,6 +39,7 @@ class ProductService extends BasicService
             $this->entityManager->remove($product);
             $this->entityManager->flush();
         } catch (ORMException $exception) {
+            $this->logger->error($exception->getMessage());
             throw new Notice('Ошибка при удалении товара!');
         }
     }
@@ -50,6 +53,7 @@ class ProductService extends BasicService
     {
         try {
             if (!$this->daDataService->isValidInn($dto->inn)) {
+                $this->logger->info($dto->inn . ' не найден');
                 throw new Notice('Не корректный ИНН!');
             }
 
@@ -70,7 +74,7 @@ class ProductService extends BasicService
             $this->entityManager->persist($product);
             $this->entityManager->flush();
         } catch (ORMException $exception) {
-
+            $this->logger->error($exception->getMessage());
             throw new Notice('Ошибка при сохранении товара!');
         }
     }
