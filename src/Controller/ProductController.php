@@ -4,8 +4,8 @@ namespace App\Controller;
 
 
 use App\Dto\CategoryDto;
+use App\Dto\DtoInterface;
 use App\Dto\ProductDto;
-use App\Exception\ApiException;
 use App\Service\ProductService;
 
 class ProductController extends BasicController
@@ -16,14 +16,25 @@ class ProductController extends BasicController
     {
     }
 
-    /**
-     * @param array $postData
-     * @return ProductDto[]
-     * @throws ApiException
-     */
-    public function get(array $postData): array
+    public function getByFilter(array $postData): array
     {
         $dto = $this->arrayToDto($postData, ProductDto::class, ['categories' => CategoryDto::class]);
-        return $this->service->toItemDto($this->service->get($dto));
+        return $this->service->toItemDto($this->service->getByFilter($dto));
+    }
+
+    public function get(array $postData, int $id): DtoInterface
+    {
+        return $this->service->get($id)->toDto();
+    }
+
+    public function delete(array $postData, int $id): void
+    {
+        $this->service->delete($id);
+    }
+
+    public function save(array $postData): void
+    {
+        $dto = $this->arrayToDto($postData, ProductDto::class, ['categories' => CategoryDto::class]);
+        $this->service->save($dto);
     }
 }
