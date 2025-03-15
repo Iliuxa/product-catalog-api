@@ -5,11 +5,13 @@ namespace App\Service;
 use App\Dto\DtoInterface;
 use App\Entity\AbstractEntity;
 use Doctrine\ORM\EntityManager;
+use Monolog\Logger;
 
 class BasicService
 {
     public function __construct(
         protected EntityManager $entityManager,
+        protected Logger        $logger
     )
     {
     }
