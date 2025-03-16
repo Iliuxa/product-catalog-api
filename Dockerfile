@@ -16,6 +16,7 @@ WORKDIR /var/www/html
 
 COPY . .
 
+RUN mkdir -p /var/www/html/var/cache
 RUN chown -R www-data:www-data /var/www/html
 
 RUN a2enmod rewrite
