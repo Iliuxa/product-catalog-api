@@ -143,6 +143,9 @@ class ProductControllerTest extends BasicTestCase
         $response = $this->sendRequest('/product', 'POST', $dataCategoryNotFound);
         $this->assertEquals(404, $response['status']);
         $this->assertEquals('Категория не найдена!', ($response['body']['message']));
+
+        $response = $this->sendRequest('/product/' . $product->getId(), 'DELETE');
+        $this->assertEquals(200, $response['status']);
     }
 
     protected function setUp(): void

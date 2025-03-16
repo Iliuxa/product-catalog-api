@@ -1,0 +1,172 @@
+openapi: 3.0.0
+info:
+  title: 'Product catalog API'
+  version: '1.0'
+servers:
+  -
+    url: 'http://localhost:80'
+paths:
+  /products:
+    post:
+      tags:
+        - Product
+      summary: 'Фильтрация продуктов'
+      description: 'Получает список товаров по фильтру'
+      operationId: df24e9a342e3ec1aabbc9bd45a4fa437
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+      responses:
+        '200':
+          description: 'Список отфильтрованных товаров'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+        '400':
+          description: 'Некорректные данные'
+        '500':
+          description: 'Произошла ошибка, обратитесь в поддержку!'
+  '/product/{id:\d+}':
+    get:
+      tags:
+        - Product
+      summary: 'Получение товара по ID'
+      description: 'Возвращает информацию о товаре по его ID'
+      operationId: 3811711b18294ab440e6d1cd2e8b4954
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID товара'
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 'Данные о товаре'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductDto'
+        '404':
+          description: 'Товар не найден!'
+        '500':
+          description: 'Ошибка при получении товара!'
+    delete:
+      tags:
+        - Product
+      summary: 'Удаление товара по ID'
+      description: 'Удаляет товар по его ID'
+      operationId: 0b201ff8b0baba9f3d5899997ee88276
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'ID товара'
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 'Товар успешно удален'
+        '404':
+          description: 'Товар не найден!'
+        '500':
+          description: 'Ошибка при удалении товара!'
+  /product:
+    put:
+      tags:
+        - Product
+      summary: 'Обновление существующего товара'
+      description: 'Обновляет данные о товаре'
+      operationId: 098850f36f9b4b87d134cbd9dd875e71
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+      responses:
+        '200':
+          description: 'Товар успешно обновлен'
+        '400':
+          description: 'Некорректные данные'
+        '404':
+          description: 'Категория не найдена!'
+        '500':
+          description: 'Не корректный ИНН! / Ошибка при сохранении товара!'
+    post:
+      tags:
+        - Product
+      summary: 'Создание нового товара'
+      description: 'Создает новый товар'
+      operationId: ae07afc8e17740e568f0df3e57dd8fce
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductDto'
+      responses:
+        '200':
+          description: 'Товар успешно создан'
+        '400':
+          description: 'Некорректные данные'
+        '404':
+          description: 'Категория не найдена!'
+        '500':
+          description: 'Не корректный ИНН! / Ошибка при сохранении товара!'
+components:
+  schemas:
+    CategoryDto:
+      description: 'DTO категории'
+      properties:
+        id:
+          type: integer
+          example: 2
+          nullable: true
+        name:
+          type: string
+          example: Еда
+      type: object
+    ProductDto:
+      required:
+        - name
+        - inn
+        - ean13
+      properties:
+        id:
+          type: integer
+          example: 1
+          nullable: true
+        name:
+          type: string
+          example: Телефон
+        inn:
+          type: string
+          example: '1234567890'
+        ean13:
+          type: string
+          example: '9876543210000'
+        description:
+          type: string
+          example: 'Описание продукта'
+          nullable: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoryDto'
+          nullable: true
+      type: object
+tags:
+  -
+    name: Product
+    description: Product

@@ -11,7 +11,7 @@ make deploy
 ```
 или с хостовой машины
 ```bash
- docker exec -it php_api make deploy
+docker exec -it php_api make deploy
 ```
 Готово! приложение запущено на `http://localhost:80/`
 
@@ -22,5 +22,10 @@ php ./vendor/bin/phpunit ./tests/
 ```
 или с хостовой машины
 ```bash
- docker exec -it php_api ./vendor/bin/phpunit ./tests/
+docker exec -it php_api ./vendor/bin/phpunit ./tests/
+```
+
+Перегенерировать документацию
+```bash
+./vendor/bin/openapi src -o openapi.yaml
 ```

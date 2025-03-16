@@ -16,7 +16,8 @@
         "doctrine/orm": "^3.3",
         "doctrine/migrations": "^3.8",
         "symfony/cache": "^7.2",
-        "monolog/monolog": "^3.8"
+        "monolog/monolog": "^3.8",
+        "zircote/swagger-php": "^5.0"
     },
     "require-dev": {
         "doctrine/data-fixtures": "^2.0",
