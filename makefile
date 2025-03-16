@@ -4,9 +4,9 @@ install:
 	composer install --no-interaction
 
 migrate:
-	php ./vendor/bin/doctrine-migrations migrations:migrate
+	php cli-config.php migrations:migrate --no-interaction
 
 fixtures:
-	php ./vendor/bin/doctrine-migrations fixtures:load
+	php cli-config.php fixtures:load --no-interaction
 
 deploy: install migrate fixtures

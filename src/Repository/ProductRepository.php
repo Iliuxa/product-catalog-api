@@ -1,6 +1,6 @@
 <?php
 
-namespace App\repository;
+namespace App\Repository;
 
 use App\Dto\CategoryDto;
 use App\Dto\ProductDto;

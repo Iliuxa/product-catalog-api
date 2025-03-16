@@ -1,13 +1,26 @@
 # product-catalog-api
 
-
-Миграции
+Для того чтобы развернуть приложение необходимо выполнить
 ```bash
-php ./vendor/bin/doctrine-migrations migrations:diff
-php ./vendor/bin/doctrine-migrations migrations:migrate
+docker-compose up --build
 ```
 
-Фикстуры
+далее зайти в контейнер api и выполнить
 ```bash
-php ./vendor/bin/doctrine-migrations fixtures:load
+make deploy
+```
+или с хостовой машины
+```bash
+ docker exec -it php_api make deploy
+```
+Готово! приложение запущено на `http://localhost:80/`
+
+
+Запуск тестов из контейнера api
+```bash
+php ./vendor/bin/phpunit ./tests/
+```
+или с хостовой машины
+```bash
+ docker exec -it php_api ./vendor/bin/phpunit ./tests/
 ```

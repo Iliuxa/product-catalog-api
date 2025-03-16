@@ -28,8 +28,13 @@ class ProductService extends BasicService
 
     public function get(int $id): ProductEntity
     {
-        return $this->entityManager->find(ProductEntity::class, $id)
-            ?? throw new Notice('Товар не найден!', 404);
+        try {
+            return $this->entityManager->find(ProductEntity::class, $id)
+                ?? throw new Notice('Товар не найден!', 404);
+        } catch (ORMException $exception) {
+            $this->logger->error($exception->getMessage());
+            throw new Notice('Ошибка при получении товара!');
+        }
     }
 
     public function delete(int $id): void
