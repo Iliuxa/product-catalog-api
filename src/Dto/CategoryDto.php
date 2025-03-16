@@ -2,6 +2,17 @@
 
 namespace App\Dto;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "CategoryDto",
+    description: "DTO категории",
+    properties: [
+        new OA\Property(property: "id", type: "integer", example: 2, nullable: true),
+        new OA\Property(property: "name", type: "string", example: "Еда")
+    ],
+    type: "object"
+)]
 class CategoryDto implements DtoInterface
 {
     public ?int $id = null;

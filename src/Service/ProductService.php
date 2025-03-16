@@ -21,11 +21,20 @@ class ProductService extends BasicService
         parent::__construct($this->entityManager, $this->logger);
     }
 
+    /**
+     * @param ProductDto $dto
+     * @return array
+     */
     public function getByFilter(ProductDto $dto): array
     {
         return $this->entityManager->getRepository(ProductEntity::class)->getByDto($dto);
     }
 
+    /**
+     * @param int $id
+     * @return ProductEntity
+     * @throws Notice
+     */
     public function get(int $id): ProductEntity
     {
         try {
@@ -37,10 +46,16 @@ class ProductService extends BasicService
         }
     }
 
+    /**
+     * @param int $id
+     * @return void
+     * @throws Notice
+     */
     public function delete(int $id): void
     {
         try {
-            $product = $this->entityManager->find(ProductEntity::class, $id);
+            $product = $this->entityManager->find(ProductEntity::class, $id)
+                ?? throw new Notice('Товар не найден!', 404);
             $this->entityManager->remove($product);
             $this->entityManager->flush();
         } catch (ORMException $exception) {
