@@ -110,6 +110,13 @@ class ProductControllerTest extends BasicTestCase
             'description' => 'Ноут',
             'categories' => [['id' => $categories[0]->getId()]]
         ];
+        $dataNotFoundInn = [
+            'name' => 'Товар12',
+            'inn' => '1111111111',
+            'ean13' => '9876543210000',
+            'description' => 'Ноут',
+            'categories' => [['id' => $categories[0]->getId()]]
+        ];
         $dataDuplicate = [
             'name' => 'Товар12',
             'inn' => '7707083893',
@@ -134,6 +141,9 @@ class ProductControllerTest extends BasicTestCase
         $this->assertNotNull($product);
 
         $response = $this->sendRequest('/product', 'POST', $dataInvalidInn);
+        $this->assertEquals(400, $response['status']);
+
+        $response = $this->sendRequest('/product', 'POST', $dataNotFoundInn);
         $this->assertEquals(500, $response['status']);
         $this->assertEquals('Не корректный ИНН!', ($response['body']['message']));
 
