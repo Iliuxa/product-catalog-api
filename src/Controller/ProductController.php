@@ -6,8 +6,10 @@ namespace App\Controller;
 use App\Dto\CategoryDto;
 use App\Dto\DtoInterface;
 use App\Dto\ProductDto;
+use App\Exception\Notice;
 use App\Service\ProductService;
 use OpenApi\Attributes as OA;
+use Valitron\Validator;
 
 class ProductController extends BasicController
 {
@@ -37,7 +39,6 @@ class ProductController extends BasicController
                     items: new OA\Items(ref: "#/components/schemas/ProductDto")
                 )
             ),
-            new OA\Response(response: 400, description: "Некорректные данные"),
             new OA\Response(response: 500, description: "Произошла ошибка, обратитесь в поддержку!")
         ]
     )]
@@ -125,6 +126,15 @@ class ProductController extends BasicController
     )]
     public function save(array $postData): void
     {
+        $validator = new Validator($postData)
+            ->rule('required', ['name', 'inn', 'ean13', 'description', 'categories'])
+            ->rule('regex', 'inn', '/^\d{10}(\d{2})?$/')
+            ->rule('regex', 'ean13', '/^\d{13}$/')
+            ->rule('required', 'categories.*.id');
+        if (!$validator->validate()) {
+            throw new Notice(implode("", array_map(fn(array $errors) => implode(', ', $errors) . "\n", $validator->errors())), 400);
+        }
+
         $dto = $this->arrayToDto($postData, ProductDto::class, ['categories' => CategoryDto::class]);
         $this->service->save($dto);
     }

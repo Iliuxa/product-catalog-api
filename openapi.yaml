@@ -28,8 +28,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductDto'
-        '400':
-          description: 'Некорректные данные'
         '500':
           description: 'Произошла ошибка, обратитесь в поддержку!'
   '/product/{id:\d+}':
